@@ -67,3 +67,5 @@ startNavigation(options: NavigationOptions) => any
 | **`directions`**     | <code>string</code>  |
 
 </docgen-api>
+
+

@@ -1,6 +1,6 @@
 {
   "name": "@leolovesmile/capacitor-mapnavigation",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "This capacitorjs plugin is to add the mapbox map navigation capability to hybrid applications.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
