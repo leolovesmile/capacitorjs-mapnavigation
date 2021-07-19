@@ -1,4 +1,4 @@
-import { registerPlugin } from '@capacitor/core';
+import { registerPlugin  } from '@capacitor/core';
 
 import type { MapNavigationPlugin } from './definitions';
 
