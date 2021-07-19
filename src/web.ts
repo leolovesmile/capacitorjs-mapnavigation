@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import { MapNavigationPlugin, NavigationOptions } from './definitions';
+import { MapNavigationPlugin, NavigationOptions, PermissionStatus } from './definitions';
 
 export class MapNavigationWeb extends WebPlugin implements MapNavigationPlugin {
   constructor() {
@@ -15,7 +15,15 @@ export class MapNavigationWeb extends WebPlugin implements MapNavigationPlugin {
     return {value: 'hello '+options.value};
   }
   
-  startNavigation(options: NavigationOptions): Promise<void> {
+  async startNavigation(options: NavigationOptions): Promise<void> {
     throw new Error('功能在此平台不可用'+JSON.stringify(options));
+  }
+
+  async checkPermissions(): Promise<PermissionStatus> {
+    throw new Error('功能在此平台不可用');
+  }
+
+  async requestPermissions(): Promise<PermissionStatus> {
+    throw new Error('功能在此平台不可用');
   }
 }

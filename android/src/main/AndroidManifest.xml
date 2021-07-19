@@ -4,6 +4,7 @@
 
     <application>
         <activity android:name=".activity.DemoActivity"></activity>
+        <activity android:name=".activity.NavigationActivity"></activity>
     </application>
 
 </manifest>

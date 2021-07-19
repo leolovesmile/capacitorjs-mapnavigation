@@ -15,6 +15,8 @@ npx cap sync
 
 * [`echo(...)`](#echo)
 * [`startNavigation(...)`](#startnavigation)
+* [`checkPermissions()`](#checkpermissions)
+* [`requestPermissions()`](#requestpermissions)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -52,6 +54,28 @@ startNavigation(options: NavigationOptions) => any
 --------------------
 
 
+### checkPermissions()
+
+```typescript
+checkPermissions() => any
+```
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
+### requestPermissions()
+
+```typescript
+requestPermissions() => any
+```
+
+**Returns:** <code>any</code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -65,6 +89,13 @@ startNavigation(options: NavigationOptions) => any
 | **`endLongitude`**   | <code>number</code>  |
 | **`enableSimulate`** | <code>boolean</code> |
 | **`directions`**     | <code>string</code>  |
+
+
+#### PermissionStatus
+
+| Prop                | Type                                                                      |
+| ------------------- | ------------------------------------------------------------------------- |
+| **`mapNavigation`** | <code>"prompt" \| "prompt-with-rationale" \| "granted" \| "denied"</code> |
 
 </docgen-api>
 

@@ -1,16 +1,30 @@
 package com.leolovesmile.capacitorjs.navigation;
 
+import android.Manifest;
 import android.content.Intent;
 
 import com.getcapacitor.JSObject;
+import com.getcapacitor.PermissionState;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.leolovesmile.capacitorjs.navigation.activity.DemoActivity;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
+import com.leolovesmile.capacitorjs.navigation.activity.NavigationActivity;
 
-@CapacitorPlugin(name = "MapNavigation")
+@CapacitorPlugin(name = "MapNavigation", permissions = {
+        @Permission(
+                alias = "mapNavigation",
+                strings = {
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                }
+        )
+})
 public class MapNavigationPlugin extends Plugin {
+    private static final int PERMISSION_REQUEST_CODE = 10081;
 
     private MapNavigation implementation = new MapNavigation();
 
@@ -24,7 +38,11 @@ public class MapNavigationPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void startNavigation(PluginCall call){
+    public void startNavigation(PluginCall call) {
+        if (getPermissionState("mapNavigation") != PermissionState.GRANTED) {
+            requestPermissionForAlias("mapNavigation", call, "navigationPermsCallback");
+        }
+
         Float startLatitude = call.getFloat("startLatitude");
         Float startLongitude = call.getFloat("startLongitude");
         Float endLatitude = call.getFloat("endLatitude");
@@ -33,8 +51,25 @@ public class MapNavigationPlugin extends Plugin {
         String directions = call.getString("directions");
 
 
-        Intent intent = new Intent(this.getContext(), DemoActivity.class);
+        Intent intent = new Intent(this.getContext(), NavigationActivity.class);
+        intent.putExtra("startLng", startLongitude);
+        intent.putExtra("startLat", startLatitude);
+        intent.putExtra("endLng", endLongitude);
+        intent.putExtra("endLat", endLatitude);
+        intent.putExtra("enableSimulate", enableSimulate);
+        intent.putExtra("directions", directions);
+
         getActivity().startActivity(intent);
         call.resolve();
+    }
+
+
+    @PermissionCallback
+    private void navigationPermsCallback(PluginCall call) {
+        if (getPermissionState("mapNavigation") == PermissionState.GRANTED) {
+            startNavigation(call);
+        } else {
+            call.reject("开启定位权限以后，才能启动导航服务");
+        }
     }
 }
