@@ -29,38 +29,28 @@ public class MapNavigationPlugin extends Plugin {
     private MapNavigation implementation = new MapNavigation();
 
     @PluginMethod
-    public void echo(PluginCall call) {
-        String value = call.getString("value");
-
-        JSObject ret = new JSObject();
-        ret.put("value", implementation.echo(value));
-        call.resolve(ret);
-    }
-
-    @PluginMethod
     public void startNavigation(PluginCall call) {
         if (getPermissionState("mapNavigation") != PermissionState.GRANTED) {
             requestPermissionForAlias("mapNavigation", call, "navigationPermsCallback");
+        } else {
+            Float startLatitude = call.getFloat("startLatitude");
+            Float startLongitude = call.getFloat("startLongitude");
+            Float endLatitude = call.getFloat("endLatitude");
+            Float endLongitude = call.getFloat("endLongitude");
+            Boolean enableSimulate = call.getBoolean("enableSimulate", true);
+            String directions = call.getString("directions");
+
+            Intent intent = new Intent(this.getContext(), NavigationActivity.class);
+            intent.putExtra("startLng", startLongitude);
+            intent.putExtra("startLat", startLatitude);
+            intent.putExtra("endLng", endLongitude);
+            intent.putExtra("endLat", endLatitude);
+            intent.putExtra("enableSimulate", enableSimulate);
+            intent.putExtra("directions", directions);
+
+            getActivity().startActivity(intent);
+            call.resolve();
         }
-
-        Float startLatitude = call.getFloat("startLatitude");
-        Float startLongitude = call.getFloat("startLongitude");
-        Float endLatitude = call.getFloat("endLatitude");
-        Float endLongitude = call.getFloat("endLongitude");
-        Boolean enableSimulate = call.getBoolean("enableSimulate", true);
-        String directions = call.getString("directions");
-
-
-        Intent intent = new Intent(this.getContext(), NavigationActivity.class);
-        intent.putExtra("startLng", startLongitude);
-        intent.putExtra("startLat", startLatitude);
-        intent.putExtra("endLng", endLongitude);
-        intent.putExtra("endLat", endLatitude);
-        intent.putExtra("enableSimulate", enableSimulate);
-        intent.putExtra("directions", directions);
-
-        getActivity().startActivity(intent);
-        call.resolve();
     }
 
 
@@ -69,7 +59,7 @@ public class MapNavigationPlugin extends Plugin {
         if (getPermissionState("mapNavigation") == PermissionState.GRANTED) {
             startNavigation(call);
         } else {
-            call.reject("开启定位权限以后，才能启动导航服务");
+            call.reject("开启定位权限，并确保后台定位始终允许，才可启动导航服务", "412");
         }
     }
 }
